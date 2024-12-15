@@ -3,7 +3,7 @@ import sys
 import cv2
 import numpy
 
-sys.set_int_max_str_digits(1000000)
+sys.set_int_max_str_digits(100000000)
 def encoding(string):
     encodedString = ''
     count = 1
@@ -34,13 +34,14 @@ gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 width = int(gray_image.shape[1] * 0.5)
 height = int(gray_image.shape[0] * 0.5)
 dim = (width,height)
-resized_image = cv2.resize(gray_image,dim,interpolation = cv2.INTER_AREA)
 
-pixels = resized_image.flatten().tolist()
+pixels = gray_image.flatten().astype(str)
 
-compressed_data = encoding(pixels)
-numpy.save("compressed_image.npy", numpy.array(compressed_data,dtype=numpy.uint64))
+compressed_data = numpy.array(encoding(pixels), dtype = numpy.uint8)
+numpy.save("Compressed_image_new.bmp", compressed_data)
 
-decompressed_data = decoding(compressed_data,resized_image.shape)
-cv2.imwrite("C:/Users/ahmed.mostafa/PycharmProjects/Image_Hashing/images",decompressed_data)
+decompressed_data = decoding(compressed_data, gray_image.shape)
+cv2.imwrite("C:/Users/Ahmed mostafa/PycharmProjects/Image-Hashing/images",decompressed_data)
+
+print("Compression complete. Decompressed image saved as 'Compressed_image_new.bmp'.")
 
